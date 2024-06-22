@@ -7,6 +7,7 @@ using System.IO;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace DTXMania
 {
@@ -1693,18 +1694,13 @@ namespace DTXMania
 				{
 					return order * System.Math.Sign( num );
 				}
-				string strAuthorN1 = "";
-				string strAuthorN2 = "";
-				if (n1.arScore[ nL12345 ] != null )
-                {
-					strAuthorN1 = n1.arScore[ nL12345 ].SongInformation.ArtistName;
-				}
-				if ( n2.arScore[ nL12345 ] != null )
-				{
-					strAuthorN2 = n2.arScore[ nL12345 ].SongInformation.ArtistName;
-				}
 
-				return order * strAuthorN1.CompareTo( strAuthorN2 );
+                CScore n1Score = n1.arScore[nL12345] ?? n1.arScore.FirstOrDefault(s => s != null);
+                CScore n2Score = n2.arScore[nL12345] ?? n2.arScore.FirstOrDefault(s => s != null);
+                string strAuthorN1 = n1Score == null ? "" : n1Score.SongInformation.ArtistName;
+                string strAuthorN2 = n2Score == null ? "" : n2Score.SongInformation.ArtistName;
+
+                return order * strAuthorN1.CompareTo( strAuthorN2 );
 			} );
 			foreach ( CSongListNode c曲リストノード in ノードリスト )
 			{
